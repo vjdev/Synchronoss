@@ -27,7 +27,7 @@ class SearchTrainViewController: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        if stationsList.count == 0 {
+        if stationsList.isEmpty {
             SwiftSpinner.useContainerView(view)
             SwiftSpinner.show("Please wait loading station list ....")
             presenter?.fetchallStations()
@@ -135,14 +135,7 @@ extension SearchTrainViewController:UITableViewDataSource,UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "train", for: indexPath) as! TrainInfoCell
-        let train = trains[indexPath.row]
-        cell.trainCode.text = train.trainCode
-        cell.souceInfoLabel.text = train.stationFullName
-        cell.sourceTimeLabel.text = train.expDeparture
-        if let _destinationDetails = train.destinationDetails {
-            cell.destinationInfoLabel.text = _destinationDetails.locationFullName
-            cell.destinationTimeLabel.text = _destinationDetails.expDeparture
-        }
+        cell.setupCell(train: trains[indexPath.row])
         return cell
     }
 
