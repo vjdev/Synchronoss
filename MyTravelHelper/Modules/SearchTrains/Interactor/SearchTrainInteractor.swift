@@ -8,7 +8,6 @@
 
 import Foundation
 import XMLParsing
-import Alamofire
 
 class SearchTrainInteractor: PresenterToInteractorProtocol {
     var _sourceStationCode = String()
@@ -16,12 +15,14 @@ class SearchTrainInteractor: PresenterToInteractorProtocol {
     var presenter: InteractorToPresenterProtocol?
 
     func fetchallStations() {
-        if Reach().isNetworkReachable() == true {
-            Alamofire.request("http://api.irishrail.ie/realtime/realtime.asmx/getAllStationsXML")
-                .response { (response) in
-                let station = try? XMLDecoder().decode(Stations.self, from: response.data!)
+        if Reach().isNetworkReachable() {
+            let url = "http://api.irishrail.ie/realtime/realtime.asmx/getAllStationsXML"
+            APIHandler.sharedInstane.request(url: url) { data, error in
+                guard let data = data else {return}
+                let station = try? XMLDecoder().decode(Stations.self, from: data)
                 self.presenter!.stationListFetched(list: station!.stationsList)
             }
+            
         } else {
             self.presenter!.showNoInterNetAvailabilityMessage()
         }
@@ -32,8 +33,8 @@ class SearchTrainInteractor: PresenterToInteractorProtocol {
         _destinationStationCode = destinationCode
         let urlString = "http://api.irishrail.ie/realtime/realtime.asmx/getStationDataByCodeXML?StationCode=\(sourceCode)"
         if Reach().isNetworkReachable() {
-            Alamofire.request(urlString).response { (response) in
-                let stationData = try? XMLDecoder().decode(StationData.self, from: response.data!)
+            APIHandler.sharedInstane.request(url: urlString) { data, error in
+                let stationData = try? XMLDecoder().decode(StationData.self, from: data!)
                 if let _trainsList = stationData?.trainsList {
                     self.proceesTrainListforDestinationCheck(trainsList: _trainsList)
                 } else {
@@ -55,10 +56,10 @@ class SearchTrainInteractor: PresenterToInteractorProtocol {
         
         for index  in 0...trainsList.count-1 {
             group.enter()
-            let _urlString = "http://api.irishrail.ie/realtime/realtime.asmx/getTrainMovementsXML?TrainId=\(trainsList[index].trainCode)&TrainDate=\(dateString)"
+            let urlString = "http://api.irishrail.ie/realtime/realtime.asmx/getTrainMovementsXML?TrainId=\(trainsList[index].trainCode)&TrainDate=\(dateString)"
             if Reach().isNetworkReachable() {
-                Alamofire.request(_urlString).response { (movementsData) in
-                    let trainMovements = try? XMLDecoder().decode(TrainMovementsData.self, from: movementsData.data!)
+                APIHandler.sharedInstane.request(url: urlString) { data, error in
+                    let trainMovements = try? XMLDecoder().decode(TrainMovementsData.self, from: data!)
 
                     if let _movements = trainMovements?.trainMovements {
                         let sourceIndex = _movements.firstIndex(where: {$0.locationCode.caseInsensitiveCompare(self._sourceStationCode) == .orderedSame})
@@ -83,3 +84,17 @@ class SearchTrainInteractor: PresenterToInteractorProtocol {
         }
     }
 }
+
+final class APIHandler {
+    private init() {}
+    public static let sharedInstane = APIHandler()
+
+    public func request(url: String, with completion: @escaping (Data?,Error?) -> Void) {
+        guard let url = URL(string: url) else {return}
+        URLSession.shared.dataTask(with: url) { data, _, error in
+            completion(data, error)
+        }.resume()
+    }
+}
+
+
