@@ -10,7 +10,7 @@ import Foundation
 
 public struct TravelHelpURL {
     static let baseURL = "http://api.irishrail.ie/realtime/realtime.asmx/"
-    static let getAllStations = "\(baseURL)getAllSttionsXML"
+    static let getAllStations = "\(baseURL)getAllStationsXML"
     static let getStationDataByCode = "\(baseURL)getStationDataByCodeXML?StationCode="
     static let getTrainMovement = "\(baseURL)getTrainMovementsXML?"
 }
