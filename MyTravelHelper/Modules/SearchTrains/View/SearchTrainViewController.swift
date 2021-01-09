@@ -58,23 +58,29 @@ extension SearchTrainViewController:PresenterToViewProtocol {
     }
     
     func showNoTrainAvailbilityFromSource() {
-        trainsListTable.isHidden = true
-        hideProgressIndicator(view: self.view)
-        showAlert(title: "No Trains", message: "Sorry No trains arriving source station in another 90 mins", actionTitle: "Okay")
+        DispatchQueue.main.async {
+            self.trainsListTable.isHidden = true
+            hideProgressIndicator(view: self.view)
+            self.showAlert(title: "No Trains", message: "Sorry No trains arriving source station in another 90 mins", actionTitle: "Okay")
+        }
     }
 
     func updateLatestTrainList(trainsList: [StationTrain]) {
-        hideProgressIndicator(view: self.view)
-        trains = trainsList
-        trainsListTable.isHidden = false
-        trainsListTable.reloadData()
+        DispatchQueue.main.async {
+            hideProgressIndicator(view: self.view)
+            self.trains = trainsList
+            self.trainsListTable.isHidden = false
+            self.trainsListTable.reloadData()
+        }
     }
 
     func showNoTrainsFoundAlert() {
-        trainsListTable.isHidden = true
-        hideProgressIndicator(view: self.view)
-        trainsListTable.isHidden = true
-        showAlert(title: "No Trains", message: "Sorry No trains Found from source to destination in another 90 mins", actionTitle: "Okay")
+        DispatchQueue.main.async {
+            self.trainsListTable.isHidden = true
+            hideProgressIndicator(view: self.view)
+            self.trainsListTable.isHidden = true
+            self.showAlert(title: "No Trains", message: "Sorry No trains Found from source to destination in another 90 mins", actionTitle: "Okay")
+        }
     }
 
     func showAlert(title:String,message:String,actionTitle:String) {
