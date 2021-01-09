@@ -42,12 +42,21 @@ class SearchTrainViewController: UIViewController {
 }
 
 extension SearchTrainViewController:PresenterToViewProtocol {
+ 
     func showNoInterNetAvailabilityMessage() {
         trainsListTable.isHidden = true
         hideProgressIndicator(view: self.view)
         showAlert(title: "No Internet", message: "Please Check you internet connection and try again", actionTitle: "Okay")
     }
 
+    func showAPIErrorMessage(message: String) {
+        DispatchQueue.main.async {
+            self.trainsListTable.isHidden = true
+            hideProgressIndicator(view: self.view)
+            self.showAlert(title: "Something went wrong!", message: message, actionTitle: "Okay")
+        }
+    }
+    
     func showNoTrainAvailbilityFromSource() {
         trainsListTable.isHidden = true
         hideProgressIndicator(view: self.view)
@@ -120,7 +129,8 @@ extension SearchTrainViewController:UITextFieldDelegate {
                 desiredSearchText = String(desiredSearchText.dropLast())
             }
 
-            dropDown.dataSource = stationsList
+            dropDown.dataSource = stationsList.map {$0.stationDesc}
+
             dropDown.show()
             dropDown.reloadAllComponents()
         }

@@ -27,6 +27,8 @@
 		753F0851223618AD00175107 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 753F084F223618AD00175107 /* LaunchScreen.storyboard */; };
 		753F087122361A6500175107 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F087022361A6500175107 /* AppConstants.swift */; };
 		8CBBCE0D40B8FE266A1617DE /* Pods_MyTravelHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF635B96516F13D67ADE01AF /* Pods_MyTravelHelper.framework */; };
+		9715488E25A9A04E00FA7DF1 /* APIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9715488D25A9A04E00FA7DF1 /* APIHandler.swift */; };
+		9715489225A9A08700FA7DF1 /* TravelHelpURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9715489125A9A08700FA7DF1 /* TravelHelpURL.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +68,8 @@
 		753F085D223618AE00175107 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		753F087022361A6500175107 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		849A0A29A57A433EA5AB15FB /* Pods-MyTravelHelperTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTravelHelperTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyTravelHelperTests/Pods-MyTravelHelperTests.release.xcconfig"; sourceTree = "<group>"; };
+		9715488D25A9A04E00FA7DF1 /* APIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIHandler.swift; sourceTree = "<group>"; };
+		9715489125A9A08700FA7DF1 /* TravelHelpURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelHelpURL.swift; sourceTree = "<group>"; };
 		AF635B96516F13D67ADE01AF /* Pods_MyTravelHelper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyTravelHelper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD4A9E0F8C97F8AA92AAA053 /* Pods_MyTravelHelperTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyTravelHelperTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -186,6 +190,8 @@
 			isa = PBXGroup;
 			children = (
 				753C8FAB223623C2005FF13B /* SearchTrainInteractor.swift */,
+				9715488D25A9A04E00FA7DF1 /* APIHandler.swift */,
+				9715489125A9A08700FA7DF1 /* TravelHelpURL.swift */,
 			);
 			path = Interactor;
 			sourceTree = "<group>";
@@ -414,10 +420,12 @@
 				753C8FB522367D1C005FF13B /* AppUtils.swift in Sources */,
 				753C8FA522361EC9005FF13B /* StationInfo.swift in Sources */,
 				753C8FBC223731E3005FF13B /* Reachability.swift in Sources */,
+				9715489225A9A08700FA7DF1 /* TravelHelpURL.swift in Sources */,
 				753C8FA622361EC9005FF13B /* Stations.swift in Sources */,
 				753C8FAC223623C2005FF13B /* SearchTrainInteractor.swift in Sources */,
 				753F087122361A6500175107 /* AppConstants.swift in Sources */,
 				753F0847223618AB00175107 /* AppDelegate.swift in Sources */,
+				9715488E25A9A04E00FA7DF1 /* APIHandler.swift in Sources */,
 				753C8FA422361EC9005FF13B /* TrainMovements.swift in Sources */,
 				753C8FB022365E9A005FF13B /* SearchTrainRouter.swift in Sources */,
 			);

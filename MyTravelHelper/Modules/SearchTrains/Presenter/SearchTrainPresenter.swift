@@ -52,4 +52,9 @@ extension SearchTrainPresenter: InteractorToPresenterProtocol {
         stationsList = list
         view!.saveFetchedStations(stations: list)
     }
+    
+    func showAPIErrorMessage(error: String) {
+        view!.showAPIErrorMessage(message: error)
+    }
 }
+

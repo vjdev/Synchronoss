@@ -16,11 +16,15 @@ class SearchTrainInteractor: PresenterToInteractorProtocol {
 
     func fetchallStations() {
         if Reach().isNetworkReachable() {
-            let url = "http://api.irishrail.ie/realtime/realtime.asmx/getAllStationsXML"
+            let url =  TravelHelpURL.getAllStations
             APIHandler.sharedInstane.request(url: url) { data, error in
-                guard let data = data else {return}
-                let station = try? XMLDecoder().decode(Stations.self, from: data)
-                self.presenter!.stationListFetched(list: station!.stationsList)
+                guard let data = data, error == nil else {
+                    self.presenter?.showAPIErrorMessage(error: error?.localizedDescription ?? "")
+                    return
+                }
+                if let station = try? XMLDecoder().decode(Stations.self, from: data) {
+                    self.presenter!.stationListFetched(list: station.stationsList)
+                }
             }
             
         } else {
@@ -31,10 +35,14 @@ class SearchTrainInteractor: PresenterToInteractorProtocol {
     func fetchTrainsFromSource(sourceCode: String, destinationCode: String) {
         _sourceStationCode = sourceCode
         _destinationStationCode = destinationCode
-        let urlString = "http://api.irishrail.ie/realtime/realtime.asmx/getStationDataByCodeXML?StationCode=\(sourceCode)"
+        let urlString = "\(TravelHelpURL.getStationDataByCode)\(sourceCode)"
         if Reach().isNetworkReachable() {
             APIHandler.sharedInstane.request(url: urlString) { data, error in
-                let stationData = try? XMLDecoder().decode(StationData.self, from: data!)
+                guard let data = data, error == nil else {
+                    self.presenter?.showAPIErrorMessage(error: error?.localizedDescription ?? "")
+                    return
+                }
+                let stationData = try? XMLDecoder().decode(StationData.self, from: data)
                 if let _trainsList = stationData?.trainsList {
                     self.proceesTrainListforDestinationCheck(trainsList: _trainsList)
                 } else {
@@ -56,10 +64,14 @@ class SearchTrainInteractor: PresenterToInteractorProtocol {
         
         for index  in 0...trainsList.count-1 {
             group.enter()
-            let urlString = "http://api.irishrail.ie/realtime/realtime.asmx/getTrainMovementsXML?TrainId=\(trainsList[index].trainCode)&TrainDate=\(dateString)"
+            let urlString = "\(TravelHelpURL.getTrainMovement)TrainId=\(trainsList[index].trainCode)&TrainDate=\(dateString)"
             if Reach().isNetworkReachable() {
                 APIHandler.sharedInstane.request(url: urlString) { data, error in
-                    let trainMovements = try? XMLDecoder().decode(TrainMovementsData.self, from: data!)
+                    guard let data = data, error == nil else {
+                        self.presenter?.showAPIErrorMessage(error: error?.localizedDescription ?? "")
+                        return
+                    }
+                    let trainMovements = try? XMLDecoder().decode(TrainMovementsData.self, from: data)
 
                     if let _movements = trainMovements?.trainMovements {
                         let sourceIndex = _movements.firstIndex(where: {$0.locationCode.caseInsensitiveCompare(self._sourceStationCode) == .orderedSame})
@@ -84,17 +96,3 @@ class SearchTrainInteractor: PresenterToInteractorProtocol {
         }
     }
 }
-
-final class APIHandler {
-    private init() {}
-    public static let sharedInstane = APIHandler()
-
-    public func request(url: String, with completion: @escaping (Data?,Error?) -> Void) {
-        guard let url = URL(string: url) else {return}
-        URLSession.shared.dataTask(with: url) { data, _, error in
-            completion(data, error)
-        }.resume()
-    }
-}
-
-
